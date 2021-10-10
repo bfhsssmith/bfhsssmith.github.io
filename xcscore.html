@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+body {
+	font-family:'Roboto',sans-serif;
+}
+.teambutton.teamscored {
+	background-color: rgb(225, 225, 100);
+}
+.teambutton.teamcomplete {
+	background-color: rgb(100, 215, 100);
+}
+span.teambutton{
+	display:inline-block;
+	padding:0.3em 1.2em;
+	margin:0 0.3em 0.3em 0;
+	border-radius:2em;
+	box-sizing: border-box;
+	text-decoration:none;
+	font-family:'Roboto',sans-serif;
+	font-weight:300;
+	color:#000000;
+	background-color:#4eb5f1;
+	text-align:center;
+}
+@media all and (max-width:30em){
+	span.teambutton{
+		display:block;
+		margin:0.2em auto;
+	}
+}
+span .teamplaces {
+	display:block;
+	font-size: smaller;
+	min-width: 12em;
+}
+</style>
+<script src="jquery-3.6.0.min.js"></script>
+<script src="xcscore.js"></script>
+<script>
+	/*
+	 * TODO:
+	 * save state to domlocalstorage
+	 * presets?
+	 */
+	var xcs = new XCScorer();
+	$(function() {
+		$('#start').click(function() {
+			$('#start').hide();
+			$('#stop').show();
+			xcs.startTiming();
+			console.log("start timing");
+			if (xcs.timerInterval == null) {
+				xcs.timerInterval = setInterval(() => { $('#clock').text(xcs.getTimeOffset()) }, 100);
+			}
+		});
+		$('#stop').hide().click(function() {
+			$('#stop').hide();
+			$('#start').show();
+			xcs.stopTiming();
+			console.log("stop timing");
+			if (xcs.timerInterval != null) {
+				clearInterval(xcs.timerInterval);
+				xcs.timerInterval = null;
+			}
+		});
+		$('#reset').click(function() {
+			if (window.confirm("Really reset?")) {
+				var clearTeams = window.confirm("Clear teams?");
+				xcs.resetAll(clearTeams);
+				console.log("reset all");
+				if (xcs.timerInterval != null) {
+					clearInterval(xcs.timerInterval);
+					xcs.timerInterval = null;
+				}
+				if (clearTeams) {
+					$('.teambutton.userteam').remove();
+				} else {
+					$('.teamplaces').html("&nbsp;");
+					$('.teambutton').removeClass('teamscored').removeClass('teamcomplete');
+				}
+				$('.finisherrow').remove();
+				$('#nextplace').text(xcs.getNextPlaceString());				
+			}
+		});
+		$('#add').click(function() {
+			var teamName = window.prompt("Team name", "");
+			if (teamName != null) {
+				if (teamName.length == 0) {
+					teamName = "Team " + (xcs.getTeamCount() + 1);
+				}
+				var teamObject = xcs.addTeam(teamName);
+				console.log("add team " + teamName);
+				teamObject.DOMElement = $(document.createElement('span')).addClass('teambutton').addClass('userteam').appendTo('#teamlist').click(function(ev) {
+					if (!xcs.isTiming() || teamObject.isTeamComplete()) {
+						return;
+					}
+					
+					var placeObject = xcs.scorePlaceForTeam(teamObject);
+					console.log("score place for team " + teamObject.teamName);
+					updateTeamControl(teamObject);
+					$('#nextplace').text(xcs.getNextPlaceString());
+					
+					//placeObject.DOMElement = $(document.createElement('div')).addClass('finisher').appendTo('#finisherlist').text(placeObject.getPlaceText());
+					placeObject.DOMElement = getPlaceTableRow(placeObject);
+					$(placeObject.DOMElement).appendTo('#finisherlist');
+				}).append($(document.createElement('span')).addClass('teamname').text(teamName))
+				.append($(document.createElement('span')).addClass('teamplaces').html("&nbsp;"))
+				.get(0);
+			}
+		});
+		$('#undo').click(function() {
+			var placeObject = xcs.undoLastPlace();
+			console.log("undo last place");
+			if (placeObject != null) {
+				if (placeObject.team != null) {
+					updateTeamControl(placeObject.team);
+				}
+				$(placeObject.DOMElement).remove();
+			}
+			$('#nextplace').text(xcs.getNextPlaceString());
+		});
+		$('#nonteam').click(function() {
+			if (!xcs.isTiming()) {
+				return;
+			}
+			
+			var placeObject = xcs.scorePlaceForNonTeam();
+			console.log("score place for non team");
+			$('#nextplace').text(xcs.getNextPlaceString());
+			// placeObject.DOMElement = $(document.createElement('div')).addClass('finisher').appendTo('#finisherlist').text(placeObject.getPlaceText());
+			placeObject.DOMElement = getPlaceTableRow(placeObject);
+			$(placeObject.DOMElement).appendTo('#finisherlist');
+		});
+		$('#otherteam').click(function() {
+			if (!xcs.isTiming()) {
+				return;
+			}
+
+			var placeObject = xcs.scorePlaceForOtherTeam();
+			console.log("score place for other team");
+			$('#nextplace').text(xcs.getNextPlaceString());
+			// placeObject.DOMElement = $(document.createElement('div')).addClass('finisher').appendTo('#finisherlist').text(placeObject.getPlaceText());
+			placeObject.DOMElement = getPlaceTableRow(placeObject);
+			$(placeObject.DOMElement).appendTo('#finisherlist');
+		});
+		$('#nextplace').text(xcs.getNextPlaceString());
+		$('#clock').text(xcs.getTimeOffset());
+	});
+</script>
+</head>
+<body>
+xcscorer
+
+<div id="start" class="button">start</div>
+<div id="stop" class="button">stop</div>
+<div id="reset" class="button">reset</div>
+<div id="add" class="button">add</div>
+<div id="undo" class="button">undo</div>
+
+<div id="info">
+<div id="clock"></div>
+<div id="nextplace"></div>
+</div>
+
+<div id="teamlist">
+<span id="nonteam" class="teambutton">Ind</span>
+<span id="otherteam" class="teambutton">Other</span><br />
+</div>
+
+<table id="finisherlist">
+<tr class="listheader"><th>place</th><th>team</th><th>time</th><th>points</th></tr>
+</table>
+
+</body>
+</html>
