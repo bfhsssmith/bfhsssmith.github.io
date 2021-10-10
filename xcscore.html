@@ -60,6 +60,7 @@ span.teambutton {
 		$('#start').click(function() {
 			$('#start').hide();
 			$('#stop').show();
+			$('#reset').text('clear');
 			xcs.startTiming();
 			console.log("start timing");
 			if (xcs.timerInterval == null) {
@@ -69,6 +70,7 @@ span.teambutton {
 		$('#stop').hide().click(function() {
 			$('#stop').hide();
 			$('#start').show();
+			$('#reset').text('reset');
 			xcs.stopTiming();
 			console.log("stop timing");
 			if (xcs.timerInterval != null) {
@@ -78,12 +80,19 @@ span.teambutton {
 		});
 		$('#reset').click(function() {
 			if (window.confirm("Really reset?")) {
-				var clearTeams = window.confirm("Clear teams?");
-				xcs.resetAll(clearTeams);
-				console.log("reset all");
-				if (xcs.timerInterval != null) {
-					clearInterval(xcs.timerInterval);
-					xcs.timerInterval = null;
+				var clearTeams = false;
+				if (xcs.isTiming()) { // don't reset clock if running
+					xcs.resetScore(false);
+					console.log("reset score");
+				} else {
+					clearTeams = window.confirm("Remove teams?");
+					xcs.resetAll(clearTeams);
+					console.log("reset all");
+					if (xcs.timerInterval != null) {
+						clearInterval(xcs.timerInterval);
+						xcs.timerInterval = null;
+					}
+					$('#clock').text(xcs.getTimeOffset());				
 				}
 				if (clearTeams) {
 					$('.teambutton.userteam').remove();
@@ -92,7 +101,7 @@ span.teambutton {
 					$('.teambutton').removeClass('teamscored').removeClass('teamcomplete');
 				}
 				$('.finisherrow').remove();
-				$('#nextplace').text(xcs.getNextPlaceString());				
+				$('#nextplace').text(xcs.getNextPlaceString());
 			}
 		});
 		$('#add').click(function() {
