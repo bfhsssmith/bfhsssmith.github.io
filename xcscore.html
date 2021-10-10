@@ -13,7 +13,7 @@ body {
 .teambutton.teamcomplete {
 	background-color: rgb(100, 215, 100);
 }
-span.teambutton{
+span.uibutton, span.teambutton {
 	display:inline-block;
 	padding:0.3em 1.2em;
 	margin:0 0.3em 0.3em 0;
@@ -23,10 +23,15 @@ span.teambutton{
 	font-family:'Roboto',sans-serif;
 	font-weight:300;
 	color:#000000;
-	background-color:#4eb5f1;
 	text-align:center;
 }
-@media all and (max-width:30em){
+span.uibutton {
+	background-color:#c8c8c8;
+}
+span.teambutton {
+	background-color:#4eb5f1;
+}
+@media all and (max-width:30em) {
 	span.teambutton{
 		display:block;
 		margin:0.2em auto;
