@@ -37,10 +37,14 @@ span.teambutton {
 		margin:0.2em auto;
 	}
 }
-span .teamplaces {
+.teamplaces {
 	display:block;
 	font-size: smaller;
 	min-width: 12em;
+}
+
+.infoelement {
+	padding: 0 0.5em;
 }
 </style>
 <script src="jquery-3.6.0.min.js"></script>
@@ -158,17 +162,17 @@ span .teamplaces {
 </script>
 </head>
 <body>
-xcscorer
+<h3>xcscorer</h3>
 
-<div id="start" class="button">start</div>
-<div id="stop" class="button">stop</div>
-<div id="reset" class="button">reset</div>
-<div id="add" class="button">add</div>
-<div id="undo" class="button">undo</div>
+<span id="start" class="uibutton">start</span>
+<span id="stop" class="uibutton">stop</span>
+<span id="reset" class="uibutton">reset</span>
+<span id="add" class="uibutton">add</span>
+<span id="undo" class="uibutton">undo</span>
 
 <div id="info">
-<div id="clock"></div>
-<div id="nextplace"></div>
+<span id="clock" class="infoelement"></span>
+<span id="nextplace" class="infoelement"></span>
 </div>
 
 <div id="teamlist">
