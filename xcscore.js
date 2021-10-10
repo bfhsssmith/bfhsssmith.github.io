@@ -28,7 +28,7 @@ function XCScorerTeam(teamName) {
 	this.calculateScore = function() {
 		this.points = (this.places.length < 5)
 						? 0
-						: this.places.reduce((previousValue, placeObject) => (previousValue + placeObject.teamPlace), 0);
+						: this.places.slice(0, 5).reduce((previousValue, placeObject) => (previousValue + placeObject.teamPlace), 0);
 		
 		return this.points;
 	};
