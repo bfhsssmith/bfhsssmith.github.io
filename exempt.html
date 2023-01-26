@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>replit</title>
+  <link href="exempt.css" rel="stylesheet" type="text/css" />
+  <script src="exempt.js"></script>
+</head>
+
+<body>
+  <div id="instructions">Enter your quarter 1, quarter 2, and midyear exam grades. Quarter 3 and quarter 4 are optional. The calculator will determine if you are exempt, or what you need to achieve in quarter 3 and/or 4 in order to be exempt.</div>
+
+  <form id="gradeForm" action="" onsubmit="return calculate()">
+    <label for="q1">Quarter 1:</label><input name="q1" type="number" id="q1" class="gradeEntry" required />
+    <label for="q2">Quarter 2:</label><input name="q2" type="number" id="q2" class="gradeEntry" required />
+    <label for="mex">Midyear Exam:</label><input name="mex" type="number" id="mex" class="gradeEntry" required />
+    <label for="q3">Quarter 3:</label><input name="q3" type="number" id="q3" class="gradeEntry" />
+    <label for="q4">Quarter 4:</label><input name="q4" type="number" id="q4" class="gradeEntry" />
+  
+    <input id="gradeSubmit" type="submit" value="Calculate" />
+  </form>
+  
+  <div id="output"></div>
+  
+</body>
+
+</html>
