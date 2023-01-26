@@ -50,12 +50,12 @@ function calculate() {
     // (89.5*9) = 2*(q1 + q2 + q3) + 2*q4 + mex 
     // (89.5*9) - 2*(q1 + q2 + q3) - mex) = 2*q4 
     var q4Min = Math.ceil((89.5*9.0 - 2.0*(q1 + q2 + q3) - mex) / 2.0);
-    output = 'The minimum grade that you need to achieve in the quarter 4 to be exempt from the exam is <b>' + q4Min + '</b>.';
+    output = 'The minimum grade for quarter 4 is <b>' + q4Min + '</b> in order to be exempt from the final exam.';
     if (q4Min > 99)
       output += ' This is not possible.';
   } else {
     var q34Min = Math.ceil((89.5*9.0 - 2.0*(q1 + q2) - mex) / 2.0);
-    output = 'For quarters 3 and 4 combined, you need to achieve a total grade of <b>' + q34Min + '</b> to be exempt from the final.';
+    output = 'For quarters 3 and 4 combined, you need to achieve a total grade of <b>' + q34Min + '</b> points to be exempt from the final exam.';
     if (q34Min > 2*99)
       output += ' This is not possible.';
   }
