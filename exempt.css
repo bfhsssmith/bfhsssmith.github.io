@@ -1,0 +1,41 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  font-size: large;
+  font-family: sans-serif;
+}
+
+input.gradeEntry {
+  width: 5em;
+  grid-column: 2 / span 1;
+  justify-self: start;
+}
+
+#gradeSubmit {
+  padding: 1em;
+  grid-column: 2 / span 1;
+  justify-self: start;
+}
+
+label {
+  grid-column: 1 / span 1;
+  justify-self: end;
+}
+
+#instructions {
+  margin-bottom: 1em;
+  padding: 1em;
+  background-color: cornflowerblue;
+}
+
+#output {
+  margin-top: 1em;
+  padding: 1em;
+  background-color: paleturquoise;
+}
+
+#gradeForm {
+  display: grid;
+  column-gap: 0.5em;
+  row-gap: 0.5em;
+}
