@@ -1,3 +1,7 @@
+function clearOutput() {
+    document.getElementById('output').innerHTML = ''; 
+}
+
 function calculate() {
   var q1 = document.getElementById('q1').value;
   var q2 = document.getElementById('q2').value;
